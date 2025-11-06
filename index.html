@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ohjelmistotuotanto: Web-kehitys, Yksilötehtävä</title>
+    <link rel="stylesheet" href="css/main_style.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script type="module" src="main.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="title">
+          <a href="#top"><h1>RAVINTOLAT</h1></a>
+        </div>
+        <div id="header-profile">
+          <a href="profile.html"
+            ><p>Profiili</p>
+            <img
+              id="profile-icon"
+              src="/img/user_icon.svg"
+              alt="Profiili ikoni"
+          /></a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div id="list-container">
+        <div id="options">
+          <div id="menu-options">
+            <button id="dailymenu-btn" class="selected-menu">
+              PÄIVÄN RUOKALISTA
+            </button>
+            <button id="weeklymenu-btn">VIIKON RUOKALISTA</button>
+          </div>
+          <div id="item-search">
+            <select id="search-by">
+              <option value="city">Kaupunki</option>
+              <option value="name">Nimi</option>
+              <option value="company">Yhtiö</option>
+            </select>
+            <input type="text" id="search-with" placeholder="Hae ravintolat" />
+          </div>
+        </div>
+        <table>
+          <tr>
+            <th>Nimi</th>
+            <th>Osoite</th>
+          </tr>
+        </table>
+      </div>
+      <div id="map"></div>
+    </main>
+    <dialog></dialog>
+  </body>
+</html>

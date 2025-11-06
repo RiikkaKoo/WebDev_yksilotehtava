@@ -1,0 +1,264 @@
+/* COLOURS:
+#27221d
+#2b4745
+#ccb89c
+#fffdfb 
+*/
+
+html {
+  /* background-color: #f1f1ef; */
+  background-image: linear-gradient(to bottom, #f1f1ef, #50473e);
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+header {
+  margin: 0;
+  /* background-color: #2b4745; */
+  background-image: linear-gradient(to bottom, #152927, #2d6965);
+  color: #fffdfb;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+}
+
+#header-content {
+  width: 95%;
+  margin: auto;
+  padding: 0;
+  display: flex;
+  position: sticky;
+}
+
+#header-profile {
+  width: 50%;
+  display: flex;
+  justify-content: right;
+}
+
+#header-profile a {
+  width: 20%;
+  margin-right: 5%;
+  display: flex;
+  justify-content: right;
+  text-decoration: none;
+}
+
+#header-profile a p {
+  margin-right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fffdfb;
+  text-decoration: none;
+}
+
+#header-profile a:hover p {
+  color: #cac4b8;
+  text-shadow: #443e39;
+}
+
+#header-profile img {
+  width: 40%;
+  height: auto;
+  min-width: 32px;
+  max-width: 50px;
+  margin: auto 0;
+}
+
+#title {
+  width: 50%;
+  display: flex;
+  justify-content: left;
+}
+
+#title a {
+  margin-left: 5%;
+  display: flex;
+  justify-content: left;
+  text-decoration: none;
+}
+
+#title a h1 {
+  color: #fffdfb;
+  margin: auto;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: left;
+}
+
+#title a:hover h1 {
+  color: #cac4b8;
+}
+
+main {
+  width: 95%;
+  margin: auto;
+  display: flex;
+}
+
+#map {
+  position: fixed;
+  height: 100vh;
+  top: 96px;
+  right: 0;
+  width: 47.5%;
+  margin-right: 2.5%;
+}
+
+#options {
+  display: flex;
+  justify-content: right;
+  padding-top: 10px;
+  background-color: #fffdfb;
+  position: sticky;
+  top: 96px;
+}
+
+#menu-options {
+  display: flex;
+  justify-content: left;
+}
+
+#menu-options button {
+  padding: 5px 20px;
+  background-color: #fffdfb;
+  font-weight: bold;
+  color: #27221d;
+  margin: 0 5px;
+  border: 2px solid #27221d;
+}
+
+#menu-options button.selected-menu {
+  background-color: #27221d;
+  color: #fffdfb;
+}
+
+#menu-options button:hover {
+  background-color: #cac4b8;
+}
+
+#item-search {
+  padding: 5px 5px;
+  margin-left: 10px;
+  background-color: #27221d;
+}
+
+#item-search select {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #fffdfb;
+  border: 2px solid #27221d;
+}
+
+#item-search select:hover {
+  background-color: #cac4b8;
+}
+
+#item-search select:open {
+  background-color: #fffdfb;
+}
+
+#item-search input {
+  padding: 10px 5px;
+  font-size: 16px;
+  background-color: #fffdfb;
+  border: 2px solid #27221d;
+}
+
+#list-container {
+  width: 50%;
+  min-height: 90vh;
+  background-color: #fffdfb;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: auto;
+  padding: 0;
+  background-color: #fffdfb;
+}
+
+th {
+  height: 30px;
+  /* background-color: #27221d; */
+  background-image: linear-gradient(to bottom, #27221d, #50473e);
+  color: #fffdfb;
+  border-bottom: 1px solid #ccc;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 0.5em 1em;
+  text-align: left;
+}
+
+td {
+  border-bottom: 1px solid #ccc;
+  padding: 0.5em 1em;
+}
+
+tr:hover {
+  background-color: #cac4b8;
+}
+
+.highlight {
+  background-color: #888071;
+  font-weight: bold;
+}
+
+dialog {
+  text-align: right;
+  background-color: #f1f1ef;
+  width: 800px;
+  border: 8px outset #2faaa0;
+  box-shadow: 0 0 30px 5px #2b4745;
+  border-radius: 5px;
+}
+
+span {
+  text-align: right;
+  font-weight: bold;
+  color: #fffdfb;
+  background-color: #27221d;
+  padding: 5px 8px;
+}
+
+span:hover {
+  background-color: #cac4b8;
+}
+
+dialog h1 {
+  text-align: left;
+  color: #3a3835;
+  width: 80%;
+  margin: auto;
+  margin-top: 20px;
+}
+
+dialog h2 {
+  text-align: left;
+  font-size: 18px;
+  width: 80%;
+  margin: auto;
+  margin-top: 15px;
+}
+
+dialog p {
+  text-align: left;
+  width: 80%;
+  margin: auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+dialog div {
+  margin-bottom: 25px;
+}

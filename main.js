@@ -1,6 +1,15 @@
 import { restaurants as restList } from "./restaurants.js";
 import { restaurantRow, restaurantModal } from "./components.js";
 
+// Variables for the program:
+let currentMenuType = "daily";
+let restaurants;
+
+const searchBy = document.getElementById("search-by");
+const searchWith = document.getElementById("search-with");
+searchBy.addEventListener("input", filterRestaurants);
+searchWith.addEventListener("input", filterRestaurants);
+
 const map = L.map("map");
 // The map:
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -9,7 +18,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 map.setView([60.170833, 24.9375], 13);
 
-let currentMenuType = "daily";
+//---------------------------------------------------------------------------------//
 
 // If users position is found:
 function success(position) {
@@ -79,25 +88,46 @@ function closeModal() {
   });
 }
 
+async function getDailyMenu(id) {
+  try {
+    const dailyMenu = await fetchData(
+      `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/daily/${id}/fi`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return dailyMenu;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
+async function getWeeklyMenu(id) {
+  try {
+    const weeklyMenu = await fetchData(
+      `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/weekly/${id}/fi`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return weeklyMenu;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
 // Display restaurant info in a modal window:
 async function openModal(id, array) {
   let selectedRes = array.find((i) => i._id === id);
   console.log(selectedRes);
 
-  let dailyMenu = "";
-  try {
-    dailyMenu = await fetchData(
-      `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/daily/${selectedRes._id}/fi`,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  } catch (e) {
-    console.log(e);
-  }
-  console.log(dailyMenu);
-
-  const modalWindow = restaurantModal(selectedRes, dailyMenu);
+  const menu =
+    currentMenuType === "daily"
+      ? getDailyMenu(selectedRes._id)
+      : getWeeklyMenu(selectedRes._id);
+  const modalWindow = restaurantModal(selectedRes, menu, currentMenuType);
   const modalClose = document.querySelector("dialog span");
   modalClose.addEventListener("click", closeModal);
 
@@ -114,25 +144,25 @@ function selectRow(event, array) {
 
 // Show the restaurants on the table in HTML:
 function displayRestaurants(array) {
+  const table = document.getElementById("table-body");
+  table.innerHTML = "";
   if (array.length !== 0) {
     array.sort((a, b) => a.name.localeCompare(b.name));
 
     for (let r of array) {
       const tableRow = restaurantRow(r);
 
-      tableRow.addEventListener("click", (event) => selectRow(event, array)); // Adding clikc-event with function that has another parameter (the restaurant array) to all of the rows
-
-      document
-        .querySelector("table")
-        .insertAdjacentElement("beforeend", tableRow);
+      tableRow.addEventListener("click", (event) => selectRow(event, array));
+      table.insertAdjacentElement("beforeend", tableRow);
     }
   } else {
     const row = document.createElement("tr");
-    row.innerHTML = "<td>Ravintoloita ei voitu hakea.</td><td> </td>";
-    document.querySelector("table").insertAdjacentElement("beforeend", row);
+    row.innerHTML = "<td>Ravintoloita ei löytynyt.</td><td> </td>";
+    table.insertAdjacentElement("beforeend", row);
   }
 }
 
+// API fetch function:
 async function fetchData(url, options) {
   try {
     const response = await fetch(url, options);
@@ -143,19 +173,7 @@ async function fetchData(url, options) {
   }
 }
 
-async function getDailyMenu(restaurantId, lang = "en") {
-  const url = `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/daily/${restaurantId}/${lang}`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Error! Status: " + response.status);
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error("An error occurred:", error);
-  }
-}
-
+// Change selected menu type:
 function selectMenu(event) {
   const selectedBtn = event.currentTarget.id;
   currentMenuType = selectedBtn === "dailymenu-btn" ? "daily" : "weekly";
@@ -166,6 +184,18 @@ function selectMenu(event) {
   const currentSelection = document.getElementById(selectedBtn);
   currentSelection.classList.add("selected-menu");
   console.log(currentMenuType);
+}
+
+// Function for filtering the reataurants:
+function filterRestaurants() {
+  const query = searchWith.value.toLowerCase();
+  const type = searchBy.value;
+  for (let rest of restaurants) console.log(rest[type]);
+  const filtered = restaurants.filter((item) =>
+    item[type].toLowerCase().includes(query)
+  );
+
+  displayRestaurants(filtered);
 }
 
 // Main async function to test the other function:
@@ -183,14 +213,19 @@ async function main() {
         "Content-Type": "application/json",
       },
     };
-    // const restaurants = await fetchData(url, options);
-    const restaurants = restList;
+    //restaurants = await fetchData(url, options);
+    restaurants = restList;
     console.log(restaurants);
+
     displayRestaurants(restaurants);
     addToMap(restaurants);
   } catch (error) {
     console.error("An error occurred:", error);
-    displayRestaurants([]);
+    const row = document.createElement("tr");
+    row.innerHTML = "<td>Ravintoloita ei voitu hakea.</td><td> </td>";
+    document
+      .gatElementById("table-body")
+      .insertAdjacentElement("beforeend", row);
   }
 }
 

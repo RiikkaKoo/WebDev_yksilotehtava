@@ -106,3 +106,187 @@ header {
 #profile-title a:hover h1 {
   color: #cac4b8;
 }
+
+/* ---------------------------------------------------------------
+PROFILE SPECIFIC:                                                       */
+
+main {
+  min-height: 85vh;
+}
+
+/* ---------------------------------------------------------------
+SIGNUP/LOGIN CHOICE VIEW:                                                       */
+
+#login-or-signup {
+  width: 30%;
+  margin: 60px auto;
+  padding: 80px 40px;
+  background-color: #fffdfb;
+  border: 5px outset #2faaa0;
+}
+
+#login-or-signup button {
+  background-color: #2faaa0;
+  width: 40%;
+  margin: 10px 30%;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #fffdfb;
+  border: 1px solid #2faaa0;
+  border-radius: 5px;
+}
+
+#login-or-signup button:hover {
+  background-color: #2d6965;
+}
+
+#login-or-signup h1 {
+  text-align: center;
+  margin: 40px auto;
+  font-size: 22px;
+}
+
+/* ---------------------------------------------------------------
+LOGIN VIEW:                                                       */
+
+#login-box {
+  text-align: center;
+  width: 30%;
+  margin: 60px auto;
+  padding: 80px 40px;
+  background-color: #fffdfb;
+  border: 5px outset #2faaa0;
+}
+
+#login-box #login-button {
+  background-color: #2faaa0;
+  width: 30%;
+  margin: 30px 35% 10px 35%;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #fffdfb;
+  border: 1px solid #2faaa0;
+  border-radius: 5px;
+}
+
+#login-box #login-button:hover {
+  background-color: #2d6965;
+}
+
+#login-box input {
+  width: 70%;
+  margin: 5px 15%;
+  font-size: 18px;
+  padding: 5px;
+}
+
+#login-box label {
+  display: inline-block;
+  text-align: left;
+  width: 70%;
+  margin: 20px 0 2px 0;
+}
+
+#login-box h1 {
+  text-align: center;
+  margin: 40px auto;
+  font-size: 22px;
+}
+
+#login-box p {
+  width: 30%;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #2faaa0;
+  text-align: center;
+}
+
+#login-box p:hover {
+  color: #2d6965;
+}
+
+/* ---------------------------------------------------------------
+SIGNUP VIEW:                                                       */
+
+#signup-box {
+  text-align: center;
+  width: 30%;
+  margin: 60px auto;
+  padding: 80px 40px;
+  background-color: #fffdfb;
+  border: 5px outset #2faaa0;
+}
+
+#signup-box #signup-button {
+  background-color: #2faaa0;
+  width: 30%;
+  margin: 30px 35% 10px 35%;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #fffdfb;
+  border: 1px solid #2faaa0;
+  border-radius: 5px;
+}
+
+#signup-box #signup-button:hover {
+  background-color: #2d6965;
+}
+
+#signup-box input {
+  width: 70%;
+  margin: 5px 15%;
+  font-size: 18px;
+  padding: 5px;
+}
+
+#signup-box label {
+  display: inline-block;
+  text-align: left;
+  width: 70%;
+  margin: 20px 0 2px 0;
+}
+
+#signup-box h1 {
+  text-align: center;
+  margin: 40px auto;
+  font-size: 22px;
+}
+
+#signup-box p {
+  width: 30%;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #2faaa0;
+  text-align: center;
+}
+
+#signup-box p:hover {
+  color: #2d6965;
+}
+
+/* ---------------------------------------------------------------
+PROFILE VIEW:                        */
+
+#content-box {
+  display: flex;
+  justify-content: center;
+  width: 60%;
+  margin: auto;
+  padding: 30px 60px;
+  background-color: #fffdfb;
+}
+
+#avatar-box {
+  text-align: right;
+  width: 20%;
+}
+
+#image-container {
+  width: 100%;
+}
+
+#info-box {
+  width: 40%;
+}

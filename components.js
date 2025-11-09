@@ -222,3 +222,121 @@ export const signupViewContent = () => {
 
   return box;
 };
+
+export const profileView = () => {
+  const contentBox = document.createElement("div");
+  const avatarBox = document.createElement("div");
+  const imageContainer = document.createElement("div");
+  const infoBox = document.createElement("div");
+  const title = document.createElement("h1");
+
+  contentBox.id = "content-box";
+  avatarBox.id = "avatar-box";
+  infoBox.id = "info-box";
+  imageContainer.id = "image-container";
+
+  title.innerText = "PROFIILI";
+
+  const avatarImg = document.createElement("img");
+  avatarImg.src = "uploads/cat_profile_pic.jpg";
+  avatarImg.alt = "Käyttäjän profiilikuva";
+
+  const avatarChange = document.createElement("button");
+  avatarChange.innerText = "Vaihda profiilikuva";
+  avatarChange.id = "change-avatar";
+
+  const username = document.createElement("p");
+  username.innerText = "KÄYTTÄJÄTUNNUS: TESTIKÄYTTÄJÄ";
+
+  const email = document.createElement("p");
+  email.innerText = "SÄHKÖPOSTIOSOITE: TESTISPOSTI";
+
+  const favRestaurant = document.createElement("p");
+  favRestaurant.innerText = "SUOSIKKIRAVINTOLA: TESTIRAVINTOLA";
+
+  const change = document.createElement("button");
+  change.innerText = "Muuta tietoja";
+  change.id = "change-button";
+
+  const logoutBtn = document.createElement("button");
+  logoutBtn.innerText = "Kirjaudu ulos";
+  logoutBtn.id = "logout-button";
+
+  imageContainer.appendChild(avatarImg);
+  avatarBox.appendChild(imageContainer);
+  avatarBox.appendChild(avatarChange);
+
+  infoBox.appendChild(title);
+  infoBox.appendChild(username);
+  infoBox.appendChild(email);
+  infoBox.appendChild(favRestaurant);
+  infoBox.appendChild(change);
+  infoBox.appendChild(logoutBtn);
+
+  contentBox.appendChild(infoBox);
+  contentBox.appendChild(avatarBox);
+
+  return contentBox;
+};
+
+export const changeInfoModal = () => {
+  const modal = document.querySelector("dialog");
+
+  const close = document.createElement("span");
+  close.innerText = "X";
+
+  const content = document.createElement("div");
+
+  const title = document.createElement("h1");
+  title.innerText = "MUUTA TIETOJA";
+
+  const text = document.createElement("p");
+  text.innerText =
+    "Suosikkiravintolan voi valita/muuttaa etusivun ravintolalistasta, jos olet kirjautunut sisään.";
+
+  const usernameLabel = document.createElement("label");
+  usernameLabel.innerText = "Anna uusi käyttäjänimi:";
+  const usernameField = document.createElement("input");
+
+  const emailLabel = document.createElement("label");
+  emailLabel.innerText = "Anna uusi sähköposti:";
+  const emailField = document.createElement("input");
+
+  const passwordLabel = document.createElement("label");
+  passwordLabel.innerText = "Anna uusi salasana:";
+  const passwordField = document.createElement("input");
+
+  const submitChnagesBtn = document.createElement("button");
+  submitChnagesBtn.innerText = "Muuta";
+  submitChnagesBtn.id = "submit-changes-button";
+
+  usernameLabel.htmlFor = "usernameField";
+  usernameField.id = "usernameField";
+  usernameField.type = "text";
+  usernameField.name = "usernameField";
+
+  passwordLabel.htmlFor = "passwordField";
+  passwordField.id = "passwordField";
+  passwordField.type = "text";
+  passwordField.name = "passwordField";
+
+  emailLabel.htmlFor = "emailField";
+  emailField.id = "emailField";
+  emailField.type = "text";
+  emailField.name = "emailField";
+
+  content.appendChild(title);
+  content.appendChild(text);
+  content.appendChild(usernameLabel);
+  content.appendChild(usernameField);
+  content.appendChild(emailLabel);
+  content.appendChild(emailField);
+  content.appendChild(passwordLabel);
+  content.appendChild(passwordField);
+
+  modal.appendChild(close);
+  modal.appendChild(content);
+  modal.appendChild(submitChnagesBtn);
+
+  return modal;
+};

@@ -1,4 +1,9 @@
-import { loginViewContent, signupViewContent } from "./components.js";
+import {
+  loginViewContent,
+  signupViewContent,
+  profileView,
+  changeInfoModal,
+} from "./components.js";
 
 let isSignedIn = false;
 const contentContainer = document.getElementById("page-content");
@@ -63,52 +68,51 @@ function signup(event) {
 function showProfile() {
   contentContainer.innerHTML = "";
 
-  const contentBox = document.createElement("div");
-  const avatarBox = document.createElement("div");
-  const imageContainer = document.createElement("div");
-  const infoBox = document.createElement("div");
-  const title = document.createElement("h1");
+  contentContainer.innerHTML = "";
 
-  contentBox.id = "content-box";
-  avatarBox.id = "avatar-box";
-  infoBox.id = "info-box";
-  imageContainer.id = "image-container";
-
-  title.innerText = "PROFIILI";
-
-  const avatarImg = document.createElement("img");
-  avatarImg.src = "uploads/cat_profile_pic.jpg";
-  avatarImg.alt = "Käyttäjän profiilikuva";
-
-  const avatarChange = document.createElement("button");
-  avatarChange.innerText = "Vaihda profiilikuva";
-
-  const username = document.createElement("p");
-  username.innerText = "KÄYTTÄJÄTUNNUS: TESTIKÄYTTÄJÄ";
-
-  const email = document.createElement("p");
-  email.innerText = "SÄHKÖPOSTIOSOITE: TESTISPOSTI";
-
-  const favRestaurant = document.createElement("p");
-  favRestaurant.innerText = "SUOSIKKIRAVINTOLA: TESTIRAVINTOLA";
-
-  const change = document.createElement("button");
-  change.innerText = "Muuta";
-
-  imageContainer.appendChild(avatarImg);
-  avatarBox.appendChild(imageContainer);
-  avatarBox.appendChild(avatarChange);
-
-  infoBox.appendChild(title);
-  infoBox.appendChild(username);
-  infoBox.appendChild(email);
-  infoBox.appendChild(favRestaurant);
-  infoBox.appendChild(change);
-
-  contentBox.appendChild(infoBox);
-  contentBox.appendChild(avatarBox);
+  const contentBox = profileView();
 
   contentContainer.appendChild(contentBox);
+
+  document
+    .getElementById("change-button")
+    .addEventListener("click", openChangeModal);
+  document.getElementById("logout-button").addEventListener("click", logout);
+  document
+    .getElementById("change-avatar")
+    .addEventListener("click", changeProfilePicture);
+
+  contentContainer.appendChild(contentBox);
+}
+
+function openChangeModal() {
+  console.log("Avataan ikkuna tietojen muuttamiselle...");
+  const modalView = changeInfoModal();
+
+  document.querySelector("dialog span").addEventListener("click", closeModal);
+  document
+    .getElementById("submit-changes-button")
+    .addEventListener("click", submitChanges);
+
+  modalView.showModal();
+}
+
+function closeModal() {
+  const modal = document.querySelector("dialog");
+  modal.close();
+  modal.innerHTML = "";
+}
+
+function submitChanges() {
+  console.log("Lähetetään muutokset...");
+}
+
+function logout() {
+  console.log("Kirjaudutaan ulos...");
+}
+
+function changeProfilePicture() {
+  console.log("Avataan ikkuna profiilikuvan muuttamiselle...");
 }
 
 createLoginSingupBox();

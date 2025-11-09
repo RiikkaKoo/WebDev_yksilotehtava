@@ -111,7 +111,7 @@ header {
 PROFILE SPECIFIC:                                                       */
 
 main {
-  min-height: 85vh;
+  min-height: 90vh;
 }
 
 /* ---------------------------------------------------------------
@@ -274,13 +274,31 @@ PROFILE VIEW:                        */
   justify-content: center;
   width: 60%;
   margin: auto;
-  padding: 30px 60px;
+  padding: 90px 60px;
   background-color: #fffdfb;
+}
+
+#content-box button {
+  background-color: #2faaa0;
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #fffdfb;
+  border: 1px solid #2faaa0;
+  border-radius: 5px;
+}
+
+#content-box button:hover {
+  background-color: #2d6965;
 }
 
 #avatar-box {
   text-align: right;
   width: 20%;
+  padding: 50px 30px;
+  border-top: 4px solid #2faaa0;
+  border-right: 4px solid #2faaa0;
+  border-bottom: 4px solid #2faaa0;
 }
 
 #image-container {
@@ -288,5 +306,90 @@ PROFILE VIEW:                        */
 }
 
 #info-box {
+  text-align: left;
   width: 40%;
+  padding: 50px 30px;
+  border-top: 4px solid #2faaa0;
+  border-left: 4px solid #2faaa0;
+  border-bottom: 4px solid #2faaa0;
+}
+
+#info-box p {
+  margin: 30px 0;
+}
+
+#info-box button {
+  width: 50%;
+  margin: 10px 50% 10px 0;
+}
+
+/* ---------------------------------------------------------------
+DIALOG VIEW:                        */
+
+dialog {
+  text-align: right;
+  background-color: #f1f1ef;
+  width: 800px;
+  border: 8px outset #2faaa0;
+  box-shadow: 0 0 30px 5px #2b4745;
+  border-radius: 5px;
+}
+
+span {
+  text-align: right;
+  font-weight: bold;
+  color: #fffdfb;
+  background-color: #27221d;
+  padding: 5px 8px;
+}
+
+span:hover {
+  background-color: #cac4b8;
+}
+
+dialog h1 {
+  text-align: center;
+  color: #3a3835;
+  width: 80%;
+  margin: auto;
+  margin-top: 20px;
+}
+
+dialog p {
+  text-align: center;
+  width: 80%;
+  margin: auto;
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+
+dialog input {
+  text-align: left;
+  width: 60%;
+  margin: 10px 20%;
+  font-size: 18px;
+  padding: 5px;
+}
+
+dialog label {
+  display: inline-block;
+  text-align: left;
+  width: 60%;
+  margin: 0 20%;
+  margin-top: 10px;
+}
+
+dialog button {
+  width: 20%;
+  margin: 30px 40%;
+  background-color: #2faaa0;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #fffdfb;
+  border: 1px solid #2faaa0;
+  border-radius: 5px;
+}
+
+dialog button:hover {
+  background-color: #2d6965;
 }

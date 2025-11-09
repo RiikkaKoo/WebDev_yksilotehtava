@@ -27,18 +27,10 @@ export const restaurantRow = (restaurant) => {
 
 // Create and return the dialog modal window:
 export const restaurantModal = (restaurant, menu, menuType) => {
-  /*const restLocation = {
-    address: restaurant.address,
-    postalCode: restaurant.postalCode,
-    city: restaurant.city,
-  }; */
-  const { address, postalCode, city } = restaurant;
+  const top = document.createElement("div");
+  top.id = "dialog-header";
 
-  /*const company = {
-    name: restaurant.name,
-    compName: restaurant.company,
-    phone: restaurant.phone,
-  }; */
+  const { address, postalCode, city } = restaurant;
   const { name, company, phone } = restaurant;
 
   const close = document.createElement("span");
@@ -46,6 +38,7 @@ export const restaurantModal = (restaurant, menu, menuType) => {
 
   // The info colmun:
   const column1 = document.createElement("div");
+  column1.id = "rest-info";
 
   const nameTitle = document.createElement("h1");
   const addressTitle = document.createElement("h2");
@@ -64,6 +57,7 @@ export const restaurantModal = (restaurant, menu, menuType) => {
 
   // The menu column:
   const column2 = document.createElement("div");
+  column2.id = "menu-column";
 
   const menuTitle = document.createElement("h2");
 
@@ -79,19 +73,27 @@ export const restaurantModal = (restaurant, menu, menuType) => {
     column2.appendChild(menuContent);
   }
 
+  top.appendChild(nameTitle);
+  top.appendChild(close);
+
+  const columns = document.createElement("div");
+  columns.id = "columns";
+  columns.appendChild(column1);
+  columns.appendChild(column2);
+
   const dialog = document.querySelector("dialog");
-  dialog.appendChild(close);
-  dialog.appendChild(nameTitle);
-  dialog.appendChild(column1);
-  dialog.appendChild(column2);
+  dialog.appendChild(top);
+  dialog.appendChild(columns);
   return dialog;
 };
 
 function createDailyMenu(menu) {
   const menuContent = document.createElement("div");
-  if (!menu.ok) {
+  menuContent.id = "daily-menu";
+  console.log(menu);
+  if (menu === undefined || menu === null) {
     const course = document.createElement("p");
-    course.innerHTML = `Menua ei ole saatavilla.`;
+    course.innerHTML = `Ruokalistaa ei ole saatavilla.`;
     menuContent.appendChild(course);
   } else if (menu.courses.length > 0) {
     const courses = menu.courses;
@@ -102,7 +104,7 @@ function createDailyMenu(menu) {
     }
   } else {
     const course = document.createElement("p");
-    course.innerHTML = `Tälle paivälle ei ole menua.`;
+    course.innerHTML = `Tälle paivälle ei ole ruokalistaa.`;
     menuContent.appendChild(course);
   }
   return menuContent;
@@ -110,20 +112,30 @@ function createDailyMenu(menu) {
 
 function createWeeklyMenu(menu) {
   const menuContent = document.createElement("div");
-  if (menu === null) {
+  console.log(menu);
+  menuContent.id = "weekly-menu";
+  if (menu === undefined || menu === null) {
     const course = document.createElement("p");
-    course.innerHTML = `Menua ei ole saatavilla.`;
+    course.innerHTML = `Ruokalistaa ei ole saatavilla.`;
     menuContent.appendChild(course);
-  } else if (menu.courses.length > 0) {
-    const courses = menu.courses;
-    for (let i = 0; i < courses.length; i++) {
-      const course = document.createElement("p");
-      course.innerHTML = `${courses[i].name} -- ${courses[i].price}<br>${courses[i].diets}`;
-      menuContent.appendChild(course);
-    }
+  } else if (menu.days.length > 0) {
+    const days = menu.days;
+    console.log(days);
+    days.forEach((day) => {
+      const date = document.createElement("h2");
+      date.innerText = day.date;
+      const coursesDiv = document.createElement("div");
+      day.courses.forEach((c) => {
+        const course = document.createElement("p");
+        course.innerHTML = `${c.name} -- ${c.price}<br>${c.diets}`;
+        coursesDiv.appendChild(course);
+      });
+      menuContent.appendChild(date);
+      menuContent.appendChild(coursesDiv);
+    });
   } else {
     const course = document.createElement("p");
-    course.innerHTML = `Tälle paivälle ei ole menua.`;
+    course.innerHTML = `Tälle viikolle ei ole ruokalistaa.`;
     menuContent.appendChild(course);
   }
   return menuContent;

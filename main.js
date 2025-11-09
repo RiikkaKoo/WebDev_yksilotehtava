@@ -111,6 +111,7 @@ async function getWeeklyMenu(id) {
         headers: { "Content-Type": "application/json" },
       }
     );
+    console.log(weeklyMenu);
     return weeklyMenu;
   } catch (e) {
     console.log(e);
@@ -125,10 +126,11 @@ async function openModal(id, array) {
 
   const menu =
     currentMenuType === "daily"
-      ? getDailyMenu(selectedRes._id)
-      : getWeeklyMenu(selectedRes._id);
+      ? await getDailyMenu(selectedRes._id)
+      : await getWeeklyMenu(selectedRes._id);
   const modalWindow = restaurantModal(selectedRes, menu, currentMenuType);
-  const modalClose = document.querySelector("dialog span");
+  const modalClose = document.querySelector("#dialog-header span");
+  console.log(modalClose);
   modalClose.addEventListener("click", closeModal);
 
   modalWindow.showModal();

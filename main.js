@@ -215,8 +215,8 @@ async function main() {
         "Content-Type": "application/json",
       },
     };
-    //restaurants = await fetchData(url, options);
-    restaurants = restList;
+    restaurants = await fetchData(url, options);
+    //restaurants = restList;
     console.log(restaurants);
 
     displayRestaurants(restaurants);
@@ -226,7 +226,7 @@ async function main() {
     const row = document.createElement("tr");
     row.innerHTML = "<td>Ravintoloita ei voitu hakea.</td><td> </td>";
     document
-      .gatElementById("table-body")
+      .getElementById("table-body")
       .insertAdjacentElement("beforeend", row);
   }
 }

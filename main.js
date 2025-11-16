@@ -4,6 +4,7 @@ import { restaurantRow, restaurantModal } from "./components.js";
 // Variables for the program:
 let currentMenuType = "daily";
 let restaurants;
+const markersById = {};
 
 const searchBy = document.getElementById("search-by");
 const searchWith = document.getElementById("search-with");
@@ -58,12 +59,28 @@ function addToMap(array) {
   for (let r of array) {
     let rLat = r.location.coordinates[1];
     let rLong = r.location.coordinates[0];
-    L.marker([rLat, rLong])
+    const marker = L.marker([rLat, rLong])
       .addTo(map)
       .bindPopup(
         `<h3>${r.name}</h3><p>${r.address}<br>${r.postalCode}, ${r.city}</p>`
-      );
+      )
+      .on("click", () => highlightRestaurant(r._id))
+      .on("popupclose", () => {
+        const allRows = document.querySelectorAll("tr");
+        allRows.forEach((tr) => tr.classList.remove("highlighted"));
+      });
+    markersById[r._id] = marker;
   }
+}
+
+// Highlight the restaurant from the list:
+
+function highlightRestaurant(id) {
+  const allRows = document.querySelectorAll("tr");
+  allRows.forEach((tr) => tr.classList.remove("highlighted"));
+  const tableRow = document.getElementById(id);
+  tableRow.classList.add("highlighted");
+  tableRow.scrollIntoView({ behavior: "smooth" });
 }
 
 // Find location
@@ -80,12 +97,6 @@ function closeModal() {
   const modal = document.querySelector("dialog");
   modal.close();
   modal.innerHTML = "";
-
-  // Remove the highlight from the row:
-  const allRows = document.querySelectorAll("tr");
-  allRows.forEach((element) => {
-    element.classList.remove("highlight");
-  });
 }
 
 async function getDailyMenu(id) {
@@ -136,11 +147,23 @@ async function openModal(id, array) {
   modalWindow.showModal();
 }
 
+// Move map to the selected restaurant:
+function setMapToSelectedRestaurant(id) {
+  const marker = markersById[id];
+  console.log(marker);
+  if (marker) {
+    marker.openPopup();
+    const { lat, lng } = marker.getLatLng();
+    highlightRestaurant(id);
+    map.setView([lat, lng], 13);
+  }
+}
+
 // Highlight the selected row and open a modal window:
 function selectRow(event, array) {
   let element = event.currentTarget;
   console.log(element);
-  element.classList.add("highlight");
+  setMapToSelectedRestaurant(element.id, array);
   openModal(element.id, array);
 }
 

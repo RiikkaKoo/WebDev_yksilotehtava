@@ -205,13 +205,12 @@ td {
   padding: 0.5em 1em;
 }
 
-tr:hover {
-  background-color: #cac4b8;
+tr {
+  scroll-margin-top: 200px;
 }
 
-.highlight {
-  background-color: #888071;
-  font-weight: bold;
+tr:hover {
+  background-color: #cac4b8;
 }
 
 dialog {
@@ -297,4 +296,9 @@ dialog h2 {
 #rest-info {
   width: 30%;
   margin-bottom: 25px;
+}
+
+.highlighted {
+  background-color: #888071;
+  font-weight: bold;
 }

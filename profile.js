@@ -5,9 +5,9 @@ import {
   changeInfoModal,
 } from "./components.js";
 
-let isSignedIn = false;
 const contentContainer = document.getElementById("page-content");
 
+// The "front page" of the profile. User can choose to login or sign up:
 function createLoginSingupBox() {
   contentContainer.innerHTML = "";
 
@@ -32,45 +32,180 @@ function createLoginSingupBox() {
   contentContainer.appendChild(box);
 }
 
+// Open the login view for the user:
 function openLoginView() {
   contentContainer.innerHTML = "";
 
   const box = loginViewContent();
   contentContainer.appendChild(box);
 
-  document.getElementById("login-button").addEventListener("click", login);
+  const usernameField = document.getElementById("usernameField");
+  const passwordField = document.getElementById("passwordField");
+
+  document
+    .getElementById("login-button")
+    .addEventListener("click", () =>
+      login(usernameField.value, passwordField.value)
+    );
   document
     .getElementById("return-button")
     .addEventListener("click", createLoginSingupBox);
 }
 
+// Open the sign up view for the user:
 function openSignupView() {
   contentContainer.innerHTML = "";
 
   const box = signupViewContent();
   contentContainer.appendChild(box);
 
-  document.getElementById("signup-button").addEventListener("click", signup);
+  const usernameField = document.getElementById("usernameField");
+  const passwordField = document.getElementById("passwordField");
+  const emailField = document.getElementById("emailField");
+
+  document.getElementById("signup-button").addEventListener("click", () => {
+    console.log(usernameField.value + passwordField.value + emailField.value);
+    signup(usernameField.value, passwordField.value, emailField.value);
+  });
   document
     .getElementById("return-button")
     .addEventListener("click", createLoginSingupBox);
 }
 
-function login(event) {
-  console.log("Kirjaudutaan...");
-  showProfile();
+// Function for login as a user. Saves the token into session storage and opens profile view if succesful:
+async function login(username, password) {
+  try {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    };
+
+    const profile = await fetchData(
+      "https://media2.edu.metropolia.fi/restaurant/api/v1/auth/login",
+      options
+    );
+    console.log(profile);
+    if (profile) {
+      sessionStorage.setItem("token", profile.token);
+      showProfile();
+    } else {
+      const box = document.getElementById("login-box");
+      if (box.querySelector("#error") !== null)
+        box.removeChild(box.querySelector("#error"));
+      const error = document.createElement("p");
+      error.id = "error";
+      error.innerText = "Kirjautuminen epäonnistui";
+      box.prepend(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function signup(event) {
-  console.log("Luodaan uusi käyttäjä...");
+// Function for signing up as a user. Opens a new view if succesful:
+async function signup(username, password, email) {
+  try {
+    const options1 = {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
+    const isAvailable = await fetchData(
+      `https://media2.edu.metropolia.fi/restaurant/api/v1/users/available/${username}`,
+      options1
+    );
+    console.log(isAvailable);
+    if (isAvailable.available) {
+      console.log("Käyttäjänimi on vapaa");
+      try {
+        const options2 = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password,
+            email: email,
+          }),
+        };
+
+        const profile = await fetchData(
+          "https://media2.edu.metropolia.fi/restaurant/api/v1/users",
+          options2
+        );
+        console.log(profile);
+        if (profile) {
+          alert("Uusi käyttäjä luotu.");
+          openInfoView(profile);
+        } else {
+          const box = document.getElementById("signup-box");
+          if (box.querySelector("#error") !== null)
+            box.removeChild(box.querySelector("#error"));
+          const error = document.createElement("p");
+          error.id = "error";
+          error.innerText = "Käyttäjän luominen ei onnistunut";
+          box.prepend(error);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      const box = document.getElementById("signup-box");
+      if (box.querySelector("#error") !== null)
+        box.removeChild(box.querySelector("#error"));
+      const error = document.createElement("p");
+      error.id = "error";
+      error.innerText = "Käyttäjänimi on jo käytössä";
+      box.prepend(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function showProfile() {
+// Shown to user when a new user is created succesfully:
+function openInfoView(profile) {
+  contentContainer.innerHTML = "";
+  const box = document.createElement("div");
+  const title = document.createElement("h1");
+  const text = document.createElement("p");
+  const returnBtn = document.createElement("p");
+
+  box.id = "info-view";
+
+  title.innerHTML = "Uusi käyttäjä luotu!";
+  returnBtn.innerText = "Palaa profiilin etusivulle";
+  returnBtn.id = "return-button";
+
+  box.appendChild(title);
+  box.appendChild(text);
+  box.appendChild(returnBtn);
+
+  contentContainer.appendChild(box);
+
+  document
+    .getElementById("return-button")
+    .addEventListener("click", createLoginSingupBox);
+}
+
+// Shown user ptofile to user if login was succesful:
+async function showProfile() {
+  const profile = await getUserInfo();
   contentContainer.innerHTML = "";
 
-  contentContainer.innerHTML = "";
-
-  const contentBox = profileView();
+  console.log(profile);
+  const contentBox = profileView(profile);
 
   contentContainer.appendChild(contentBox);
 
@@ -85,6 +220,7 @@ function showProfile() {
   contentContainer.appendChild(contentBox);
 }
 
+// The change info view shown in modal:
 function openChangeModal() {
   console.log("Avataan ikkuna tietojen muuttamiselle...");
   const modalView = changeInfoModal();
@@ -97,22 +233,74 @@ function openChangeModal() {
   modalView.showModal();
 }
 
+// Close modal view:
 function closeModal() {
   const modal = document.querySelector("dialog");
   modal.close();
   modal.innerHTML = "";
 }
 
+// Submit changes to API:
 function submitChanges() {
   console.log("Lähetetään muutokset...");
 }
 
+// Logout from the API. Clears the session storage:
 function logout() {
+  sessionStorage.clear();
+  createLoginSingupBox();
   console.log("Kirjaudutaan ulos...");
 }
 
+// Change the profile picture by uploading a new picture:
 function changeProfilePicture() {
   console.log("Avataan ikkuna profiilikuvan muuttamiselle...");
 }
 
-createLoginSingupBox();
+// Get current users info for the profile view:
+async function getUserInfo() {
+  try {
+    const options = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    };
+
+    const profile = await fetchData(
+      "https://media2.edu.metropolia.fi/restaurant/api/v1/users/token",
+      options
+    );
+    return profile;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// API fetch function:
+async function fetchData(url, options) {
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error("Error! Status: " + response.status);
+    return await response.json();
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
+function main() {
+  const token = sessionStorage.getItem("token");
+  if (token) {
+    try {
+      showProfile();
+    } catch (error) {
+      console.log(error);
+      createLoginSingupBox();
+    }
+  } else {
+    createLoginSingupBox();
+  }
+}
+
+main();

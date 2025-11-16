@@ -235,7 +235,7 @@ export const signupViewContent = () => {
   return box;
 };
 
-export const profileView = () => {
+export const profileView = (profile) => {
   const contentBox = document.createElement("div");
   const avatarBox = document.createElement("div");
   const imageContainer = document.createElement("div");
@@ -258,13 +258,13 @@ export const profileView = () => {
   avatarChange.id = "change-avatar";
 
   const username = document.createElement("p");
-  username.innerText = "KÄYTTÄJÄTUNNUS: TESTIKÄYTTÄJÄ";
+  username.innerText = `KÄYTTÄJÄTUNNUS: ${profile.username}`;
 
   const email = document.createElement("p");
-  email.innerText = "SÄHKÖPOSTIOSOITE: TESTISPOSTI";
+  email.innerText = `SÄHKÖPOSTIOSOITE: ${profile.email}`;
 
   const favRestaurant = document.createElement("p");
-  favRestaurant.innerText = "SUOSIKKIRAVINTOLA: TESTIRAVINTOLA";
+  favRestaurant.innerText = `SUOSIKKIRAVINTOLA: ${profile.favouriteRestaurant}`;
 
   const change = document.createElement("button");
   change.innerText = "Muuta tietoja";

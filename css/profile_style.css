@@ -193,6 +193,14 @@ LOGIN VIEW:                                                       */
   font-size: 22px;
 }
 
+#login-box #error {
+  margin: 5px auto;
+  width: 50%;
+  color: rgb(141, 34, 34);
+  font-weight: bold;
+  font-size: 18px;
+}
+
 #login-box p {
   width: 30%;
   margin: 10px auto;
@@ -253,6 +261,14 @@ SIGNUP VIEW:                                                       */
   font-size: 22px;
 }
 
+#signup-box #error {
+  margin: 5px auto;
+  width: 50%;
+  color: rgb(141, 34, 34);
+  font-weight: bold;
+  font-size: 18px;
+}
+
 #signup-box p {
   width: 30%;
   margin: 10px auto;
@@ -264,6 +280,35 @@ SIGNUP VIEW:                                                       */
 
 #signup-box p:hover {
   color: #2d6965;
+}
+
+#info-view {
+  text-align: center;
+  width: 30%;
+  margin: 60px auto;
+  padding: 80px 40px;
+  background-color: #fffdfb;
+  border: 5px outset #2faaa0;
+}
+
+#info-view p {
+  width: 50%;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: #2faaa0;
+  text-align: center;
+}
+
+#info-view p:hover {
+  color: #2d6965;
+}
+
+#error {
+  width: 50%;
+  color: rgb(141, 34, 34);
+  font-weight: bold;
+  font-size: 18px;
 }
 
 /* ---------------------------------------------------------------

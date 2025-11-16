@@ -4,7 +4,7 @@ import { restaurantRow, restaurantModal } from "./components.js";
 // Variables for the program:
 let currentMenuType = "daily";
 let restaurants;
-const markersById = {};
+let markersById = {};
 
 const searchBy = document.getElementById("search-by");
 const searchWith = document.getElementById("search-with");
@@ -56,6 +56,9 @@ function error(err) {
 
 // Add all the restaurant locations to the map:
 function addToMap(array) {
+  Object.values(markersById).forEach((marker) => map.removeLayer(marker));
+
+  markersById = {};
   for (let r of array) {
     let rLat = r.location.coordinates[1];
     let rLong = r.location.coordinates[0];
@@ -221,6 +224,7 @@ function filterRestaurants() {
   );
 
   displayRestaurants(filtered);
+  addToMap(filtered);
 }
 
 // Main async function to test the other function:

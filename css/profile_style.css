@@ -214,6 +214,23 @@ LOGIN VIEW:                                                       */
   color: #2d6965;
 }
 
+#checkbox-container {
+  display: flex;
+  justify-content: left;
+  width: 70%;
+  margin: auto;
+}
+
+#checkbox-container label {
+  margin: 0;
+  margin-left: 5px;
+}
+
+#checkbox-container #showPassword-checkbox {
+  margin: 0;
+  width: auto;
+}
+
 /* ---------------------------------------------------------------
 SIGNUP VIEW:                                                       */
 
@@ -246,6 +263,11 @@ SIGNUP VIEW:                                                       */
   margin: 5px 15%;
   font-size: 18px;
   padding: 5px;
+}
+
+#signup-box #checkbox-container label {
+  margin: 0;
+  margin-left: 5px;
 }
 
 #signup-box label {
@@ -375,6 +397,7 @@ dialog {
   text-align: right;
   background-color: #f1f1ef;
   width: 800px;
+  padding-bottom: 30px;
   border: 8px outset #2faaa0;
   box-shadow: 0 0 30px 5px #2b4745;
   border-radius: 5px;
@@ -427,6 +450,7 @@ dialog label {
 dialog button {
   width: 20%;
   margin: 30px 40%;
+  margin-bottom: 5px;
   background-color: #2faaa0;
   padding: 10px 20px;
   font-size: 18px;
@@ -437,4 +461,16 @@ dialog button {
 
 dialog button:hover {
   background-color: #2d6965;
+}
+
+dialog #checkbox-container {
+  width: 60%;
+  margin: auto;
+}
+
+#message {
+  width: 50%;
+  color: rgb(23, 143, 93);
+  font-weight: bold;
+  font-size: 18px;
 }

@@ -227,7 +227,7 @@ function filterRestaurants() {
   addToMap(filtered);
 }
 
-// Main async function to test the other function:
+// Main async function:
 async function main() {
   const buttons = document.querySelectorAll("button");
   buttons.forEach((btn) => {

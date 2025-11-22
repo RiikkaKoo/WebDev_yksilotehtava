@@ -41,6 +41,13 @@ function openLoginView() {
 
   const usernameField = document.getElementById("usernameField");
   const passwordField = document.getElementById("passwordField");
+  const checkbox = document.getElementById("showPassword-checkbox");
+
+  // Show or hide password (change passwordField type between password and text):
+  checkbox.addEventListener("click", () => {
+    const type = passwordField.type === "password" ? "text" : "password";
+    passwordField.type = type;
+  });
 
   document
     .getElementById("login-button")
@@ -62,6 +69,13 @@ function openSignupView() {
   const usernameField = document.getElementById("usernameField");
   const passwordField = document.getElementById("passwordField");
   const emailField = document.getElementById("emailField");
+  const checkbox = document.getElementById("showPassword-checkbox");
+
+  // Show or hide password (change passwordField type between password and text):
+  checkbox.addEventListener("click", () => {
+    const type = passwordField.type === "password" ? "text" : "password";
+    passwordField.type = type;
+  });
 
   document.getElementById("signup-button").addEventListener("click", () => {
     console.log(usernameField.value + passwordField.value + emailField.value);
@@ -97,12 +111,7 @@ async function login(username, password) {
       showProfile();
     } else {
       const box = document.getElementById("login-box");
-      if (box.querySelector("#error") !== null)
-        box.removeChild(box.querySelector("#error"));
-      const error = document.createElement("p");
-      error.id = "error";
-      error.innerText = "Kirjautuminen epäonnistui";
-      box.prepend(error);
+      displayError("Kirjautuminen epäonnistui", box);
     }
   } catch (error) {
     console.log(error);
@@ -150,28 +159,40 @@ async function signup(username, password, email) {
           openInfoView(profile);
         } else {
           const box = document.getElementById("signup-box");
-          if (box.querySelector("#error") !== null)
-            box.removeChild(box.querySelector("#error"));
-          const error = document.createElement("p");
-          error.id = "error";
-          error.innerText = "Käyttäjän luominen ei onnistunut";
-          box.prepend(error);
+          displayError("Käyttäjän luominen ei onnistunut", box);
         }
       } catch (error) {
         console.log(error);
       }
     } else {
       const box = document.getElementById("signup-box");
-      if (box.querySelector("#error") !== null)
-        box.removeChild(box.querySelector("#error"));
-      const error = document.createElement("p");
-      error.id = "error";
-      error.innerText = "Käyttäjänimi on jo käytössä";
-      box.prepend(error);
+      displayError("Käyttäjänimi on jo käytössä", box);
     }
   } catch (error) {
     console.log(error);
   }
+}
+
+function displayError(text, container) {
+  if (container.querySelector("#error") !== null)
+    container.removeChild(container.querySelector("#error"));
+  if (container.querySelector("#message") !== null)
+    container.removeChild(container.querySelector("#message"));
+  const error = document.createElement("p");
+  error.id = "error";
+  error.innerText = text;
+  container.appendChild(error);
+}
+
+function displayMessage(text, container) {
+  if (container.querySelector("#error") !== null)
+    container.removeChild(container.querySelector("#error"));
+  if (container.querySelector("#message") !== null)
+    container.removeChild(container.querySelector("#message"));
+  const message = document.createElement("p");
+  message.id = "message";
+  message.innerText = text;
+  container.appendChild(message);
 }
 
 // Shown to user when a new user is created succesfully:
@@ -225,10 +246,23 @@ function openChangeModal() {
   console.log("Avataan ikkuna tietojen muuttamiselle...");
   const modalView = changeInfoModal();
 
+  const password = document.getElementById("passwordField");
+  const email = document.getElementById("emailField");
+  const username = document.getElementById("usernameField");
+  const checkbox = document.getElementById("showPassword-checkbox");
+
+  // Show or hide password (change passwordField type between password and text):
+  checkbox.addEventListener("click", () => {
+    const type = passwordField.type === "password" ? "text" : "password";
+    passwordField.type = type;
+  });
+
   document.querySelector("dialog span").addEventListener("click", closeModal);
   document
     .getElementById("submit-changes-button")
-    .addEventListener("click", submitChanges);
+    .addEventListener("click", () =>
+      submitChanges(password.value, email.value, username.value)
+    );
 
   modalView.showModal();
 }
@@ -241,7 +275,70 @@ function closeModal() {
 }
 
 // Submit changes to API:
-function submitChanges() {
+async function submitChanges(newPassword, newEmail, newUsername) {
+  try {
+    let usernameAvailable;
+    const user = await getUserInfo();
+    const updates = {};
+    if (newUsername && newUsername !== user.username) {
+      const options1 = {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      };
+
+      usernameAvailable = await fetchData(
+        `https://media2.edu.metropolia.fi/restaurant/api/v1/users/available/${newUsername}`,
+        options1
+      );
+      if (!usernameAvailable) {
+        displayError(
+          "Käyttäjänimi on jo varattu",
+          document.querySelector("dialog")
+        );
+        return;
+      }
+      updates.username = newUsername;
+    }
+
+    if (newEmail && newEmail !== user.email) {
+      updates.email = newEmail;
+    }
+
+    if (newPassword) {
+      updates.password = newPassword;
+    }
+
+    if (usernameAvailable) {
+      const options2 = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + sessionStorage.getItem("token"),
+        },
+        body: JSON.stringify(updates),
+      };
+
+      const response = await fetchData(
+        `https://media2.edu.metropolia.fi/restaurant/api/v1/users`,
+        options2
+      );
+      console.log("Vastaus: ", response);
+      displayMessage(
+        "Profiilitiedot päivitetty!",
+        document.querySelector("dialog")
+      );
+      showProfile();
+    }
+  } catch (error) {
+    console.log(error);
+    displayError(
+      "Profiilitietoja ei voitu päivittää",
+      document.querySelector("dialog")
+    );
+  }
   console.log("Lähetetään muutokset...");
 }
 
@@ -284,8 +381,7 @@ async function fetchData(url, options) {
     if (!response.ok) throw new Error("Error! Status: " + response.status);
     return await response.json();
   } catch (e) {
-    console.log(e);
-    return false;
+    throw e;
   }
 }
 

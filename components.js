@@ -13,9 +13,12 @@ export const restaurantRow = (restaurant) => {
   const tableRow = document.createElement("tr");
   tableRow.id = _id;
 
+  const favouriteColumn = document.createElement("td");
   const nameColumn = document.createElement("td");
   const addressColumn = document.createElement("td");
 
+  favouriteColumn.id = "favourite-column";
+  favouriteColumn.innerHTML = <img src="" alt=""></img>;
   nameColumn.innerText = name;
   addressColumn.innerHTML = `${address}<br>${postalCode}, ${city}`;
 
@@ -127,7 +130,9 @@ function createWeeklyMenu(menu) {
       const coursesDiv = document.createElement("div");
       day.courses.forEach((c) => {
         const course = document.createElement("p");
-        course.innerHTML = `${c.name} -- ${c.price}<br>${c.diets}`;
+        course.innerHTML = `${c.name} -- ${
+          c.price ?? "Hintoja ei ole annettu"
+        }<br>${c.diets ?? ""}`;
         coursesDiv.appendChild(course);
       });
       menuContent.appendChild(date);
@@ -141,13 +146,17 @@ function createWeeklyMenu(menu) {
   return menuContent;
 }
 
+// The login view in profile page:
 export const loginViewContent = () => {
   const box = document.createElement("div");
   const title = document.createElement("h1");
+  const passwordShowCheckbox = document.createElement("div");
   const usernameLabel = document.createElement("label");
   const usernameField = document.createElement("input");
   const passwordLabel = document.createElement("label");
   const passwordField = document.createElement("input");
+  const showCheck = document.createElement("input");
+  const checkboxLabel = document.createElement("label");
   const loginButton = document.createElement("button");
   const returnBtn = document.createElement("p");
 
@@ -155,6 +164,7 @@ export const loginViewContent = () => {
   title.innerText = "Kirjaudu sisään";
   usernameLabel.innerText = "Käyttäjätunnus:";
   passwordLabel.innerText = "Salasana:";
+  checkboxLabel.innerText = "Näytä salasana";
 
   usernameLabel.htmlFor = "usernameField";
   usernameField.id = "usernameField";
@@ -163,8 +173,13 @@ export const loginViewContent = () => {
 
   passwordLabel.htmlFor = "passwordField";
   passwordField.id = "passwordField";
-  passwordField.type = "text";
+  passwordField.type = "password";
   passwordField.name = "passwordField";
+
+  checkboxLabel.htmlFor = "showCheck";
+  showCheck.id = "showPassword-checkbox";
+  showCheck.type = "checkbox";
+  showCheck.name = "showCheck";
 
   loginButton.innerHTML = "Kirjaudu sisään";
   loginButton.id = "login-button";
@@ -172,24 +187,33 @@ export const loginViewContent = () => {
   returnBtn.innerText = "Palaa takaisin";
   returnBtn.id = "return-button";
 
+  passwordShowCheckbox.id = "checkbox-container";
+  passwordShowCheckbox.appendChild(showCheck);
+  passwordShowCheckbox.appendChild(checkboxLabel);
+
   box.appendChild(title);
   box.appendChild(usernameLabel);
   box.appendChild(usernameField);
   box.appendChild(passwordLabel);
   box.appendChild(passwordField);
+  box.appendChild(passwordShowCheckbox);
   box.appendChild(loginButton);
   box.appendChild(returnBtn);
 
   return box;
 };
 
+// The signup view in profile page:
 export const signupViewContent = () => {
   const box = document.createElement("div");
   const title = document.createElement("h1");
+  const passwordShowCheckbox = document.createElement("div");
   const usernameLabel = document.createElement("label");
   const usernameField = document.createElement("input");
   const passwordLabel = document.createElement("label");
   const passwordField = document.createElement("input");
+  const showCheck = document.createElement("input");
+  const checkboxLabel = document.createElement("label");
   const emailLabel = document.createElement("label");
   const emailField = document.createElement("input");
   const signupButton = document.createElement("button");
@@ -200,6 +224,7 @@ export const signupViewContent = () => {
   usernameLabel.innerText = "Käyttäjätunnus:";
   passwordLabel.innerText = "Salasana:";
   emailLabel.innerText = "Sähköposti:";
+  checkboxLabel.innerText = "Näytä salasana";
 
   usernameLabel.htmlFor = "usernameField";
   usernameField.id = "usernameField";
@@ -208,8 +233,13 @@ export const signupViewContent = () => {
 
   passwordLabel.htmlFor = "passwordField";
   passwordField.id = "passwordField";
-  passwordField.type = "text";
+  passwordField.type = "password";
   passwordField.name = "passwordField";
+
+  checkboxLabel.htmlFor = "showCheck";
+  showCheck.id = "showPassword-checkbox";
+  showCheck.type = "checkbox";
+  showCheck.name = "showCheck";
 
   emailLabel.htmlFor = "emailField";
   emailField.id = "emailField";
@@ -222,11 +252,16 @@ export const signupViewContent = () => {
   returnBtn.innerText = "Palaa takaisin";
   returnBtn.id = "return-button";
 
+  passwordShowCheckbox.id = "checkbox-container";
+  passwordShowCheckbox.appendChild(showCheck);
+  passwordShowCheckbox.appendChild(checkboxLabel);
+
   box.appendChild(title);
   box.appendChild(usernameLabel);
   box.appendChild(usernameField);
   box.appendChild(passwordLabel);
   box.appendChild(passwordField);
+  box.appendChild(passwordShowCheckbox);
   box.appendChild(emailLabel);
   box.appendChild(emailField);
   box.appendChild(signupButton);
@@ -235,6 +270,7 @@ export const signupViewContent = () => {
   return box;
 };
 
+// The profile view if user is logged in:
 export const profileView = (profile) => {
   const contentBox = document.createElement("div");
   const avatarBox = document.createElement("div");
@@ -264,7 +300,9 @@ export const profileView = (profile) => {
   email.innerText = `SÄHKÖPOSTIOSOITE: ${profile.email}`;
 
   const favRestaurant = document.createElement("p");
-  favRestaurant.innerText = `SUOSIKKIRAVINTOLA: ${profile.favouriteRestaurant}`;
+  favRestaurant.innerText = `SUOSIKKIRAVINTOLA: ${
+    profile.favouriteRestaurant ?? "Ei valittu"
+  }`;
 
   const change = document.createElement("button");
   change.innerText = "Muuta tietoja";
@@ -291,6 +329,7 @@ export const profileView = (profile) => {
   return contentBox;
 };
 
+// Modal dialog view for changing user information:
 export const changeInfoModal = () => {
   const modal = document.querySelector("dialog");
 
@@ -305,6 +344,18 @@ export const changeInfoModal = () => {
   const text = document.createElement("p");
   text.innerText =
     "Suosikkiravintolan voi valita/muuttaa etusivun ravintolalistasta, jos olet kirjautunut sisään.";
+
+  const passwordShowCheckbox = document.createElement("div");
+  const showCheck = document.createElement("input");
+  const checkboxLabel = document.createElement("label");
+  checkboxLabel.innerText = "Näytä salasana";
+  checkboxLabel.htmlFor = "showCheck";
+  showCheck.id = "showPassword-checkbox";
+  showCheck.type = "checkbox";
+  showCheck.name = "showCheck";
+  passwordShowCheckbox.id = "checkbox-container";
+  passwordShowCheckbox.appendChild(showCheck);
+  passwordShowCheckbox.appendChild(checkboxLabel);
 
   const usernameLabel = document.createElement("label");
   usernameLabel.innerText = "Anna uusi käyttäjänimi:";
@@ -329,7 +380,7 @@ export const changeInfoModal = () => {
 
   passwordLabel.htmlFor = "passwordField";
   passwordField.id = "passwordField";
-  passwordField.type = "text";
+  passwordField.type = "password";
   passwordField.name = "passwordField";
 
   emailLabel.htmlFor = "emailField";
@@ -345,6 +396,7 @@ export const changeInfoModal = () => {
   content.appendChild(emailField);
   content.appendChild(passwordLabel);
   content.appendChild(passwordField);
+  content.appendChild(passwordShowCheckbox);
 
   modal.appendChild(close);
   modal.appendChild(content);

@@ -447,6 +447,14 @@ dialog label {
   margin-top: 10px;
 }
 
+dialog select {
+  text-align: left;
+  width: 60%;
+  margin: 10px 20%;
+  font-size: 18px;
+  padding: 5px;
+}
+
 dialog button {
   width: 20%;
   margin: 30px 40%;

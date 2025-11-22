@@ -181,7 +181,12 @@ function displayRestaurants(array) {
       const tableRow = restaurantRow(r);
 
       tableRow.addEventListener("click", (event) => selectRow(event, array));
-      table.insertAdjacentElement("beforeend", tableRow);
+      // Put the favourited restaurant at the top of the list:
+      if (!tableRow.classList.contains("favourite")) {
+        table.insertAdjacentElement("beforeend", tableRow);
+      } else {
+        table.insertAdjacentElement("afterbegin", tableRow);
+      }
     }
   } else {
     const row = document.createElement("tr");
@@ -243,7 +248,8 @@ async function main() {
       },
     };
     restaurants = await fetchData(url, options);
-    //restaurants = restList;
+    sessionStorage.setItem("restaurants", JSON.stringify(restaurants));
+    // restaurants = restList;
     console.log(restaurants);
 
     displayRestaurants(restaurants);

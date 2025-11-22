@@ -14,14 +14,27 @@ export const restaurantRow = (restaurant) => {
   tableRow.id = _id;
 
   const favouriteColumn = document.createElement("td");
+  favouriteColumn.classList.add("favourite-column");
   const nameColumn = document.createElement("td");
   const addressColumn = document.createElement("td");
 
-  favouriteColumn.id = "favourite-column";
-  favouriteColumn.innerHTML = <img src="" alt=""></img>;
+  if (sessionStorage.getItem("token")) {
+    const favourite = sessionStorage.getItem("favouriteRest");
+    if (_id === favourite) tableRow.classList.add("favourite");
+    const img =
+      _id === favourite
+        ? '<img src="./img/heart_icon_500x500.png" alt=""></img>'
+        : '<img src="./img/heart_icon_empty_500x500.png" alt=""></img>';
+    favouriteColumn.innerHTML = img;
+  } else {
+    favouriteColumn.innerHTML =
+      '<img src="./img/heart_icon_empty_500x500.png" alt=""></img>';
+  }
+
   nameColumn.innerText = name;
   addressColumn.innerHTML = `${address}<br>${postalCode}, ${city}`;
 
+  tableRow.appendChild(favouriteColumn);
   tableRow.appendChild(nameColumn);
   tableRow.appendChild(addressColumn);
 
@@ -102,7 +115,9 @@ function createDailyMenu(menu) {
     const courses = menu.courses;
     for (let i = 0; i < courses.length; i++) {
       const course = document.createElement("p");
-      course.innerHTML = `${courses[i].name} -- ${courses[i].price}<br>${courses[i].diets}`;
+      course.innerHTML = `${courses[i].name} -- ${
+        courses[i].price ?? "Hintoja ei ole asetettu"
+      }<br>${courses[i].diets ?? ""}`;
       menuContent.appendChild(course);
     }
   } else {
@@ -272,6 +287,8 @@ export const signupViewContent = () => {
 
 // The profile view if user is logged in:
 export const profileView = (profile) => {
+  const restaurants = JSON.parse(sessionStorage.getItem("restaurants"));
+
   const contentBox = document.createElement("div");
   const avatarBox = document.createElement("div");
   const imageContainer = document.createElement("div");
@@ -299,9 +316,12 @@ export const profileView = (profile) => {
   const email = document.createElement("p");
   email.innerText = `SÄHKÖPOSTIOSOITE: ${profile.email}`;
 
+  const favourite = restaurants.find(
+    (r) => r._id === profile.favouriteRestaurant
+  );
   const favRestaurant = document.createElement("p");
   favRestaurant.innerText = `SUOSIKKIRAVINTOLA: ${
-    profile.favouriteRestaurant ?? "Ei valittu"
+    favourite.name ?? "Ei valittu"
   }`;
 
   const change = document.createElement("button");
@@ -330,7 +350,10 @@ export const profileView = (profile) => {
 };
 
 // Modal dialog view for changing user information:
-export const changeInfoModal = () => {
+export const changeInfoModal = (reataurants) => {
+  const restaurantJson = JSON.parse(reataurants);
+  restaurantJson.sort((a, b) => a.name.localeCompare(b.name));
+
   const modal = document.querySelector("dialog");
 
   const close = document.createElement("span");
@@ -340,10 +363,6 @@ export const changeInfoModal = () => {
 
   const title = document.createElement("h1");
   title.innerText = "MUUTA TIETOJA";
-
-  const text = document.createElement("p");
-  text.innerText =
-    "Suosikkiravintolan voi valita/muuttaa etusivun ravintolalistasta, jos olet kirjautunut sisään.";
 
   const passwordShowCheckbox = document.createElement("div");
   const showCheck = document.createElement("input");
@@ -365,6 +384,19 @@ export const changeInfoModal = () => {
   emailLabel.innerText = "Anna uusi sähköposti:";
   const emailField = document.createElement("input");
 
+  const favouriteLabel = document.createElement("label");
+  favouriteLabel.innerText = "Valitse suosikkiravintola:";
+  const restaurantSelect = document.createElement("select");
+
+  restaurantJson.forEach((r) => {
+    const option = document.createElement("option");
+    option.value = r._id;
+    if (r._id === sessionStorage.getItem("favouriteRest"))
+      option.selected = true;
+    option.innerText = r.name;
+    restaurantSelect.appendChild(option);
+  });
+
   const passwordLabel = document.createElement("label");
   passwordLabel.innerText = "Anna uusi salasana:";
   const passwordField = document.createElement("input");
@@ -378,6 +410,9 @@ export const changeInfoModal = () => {
   usernameField.type = "text";
   usernameField.name = "usernameField";
 
+  favouriteLabel.htmlFor = "restaurant-selection";
+  restaurantSelect.id = "restaurant-selection";
+
   passwordLabel.htmlFor = "passwordField";
   passwordField.id = "passwordField";
   passwordField.type = "password";
@@ -389,11 +424,12 @@ export const changeInfoModal = () => {
   emailField.name = "emailField";
 
   content.appendChild(title);
-  content.appendChild(text);
   content.appendChild(usernameLabel);
   content.appendChild(usernameField);
   content.appendChild(emailLabel);
   content.appendChild(emailField);
+  content.appendChild(favouriteLabel);
+  content.appendChild(restaurantSelect);
   content.appendChild(passwordLabel);
   content.appendChild(passwordField);
   content.appendChild(passwordShowCheckbox);

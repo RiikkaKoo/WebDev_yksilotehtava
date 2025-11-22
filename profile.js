@@ -115,6 +115,8 @@ async function login(username, password) {
     }
   } catch (error) {
     console.log(error);
+    const box = document.getElementById("login-box");
+    displayError("Kirjautuminen epäonnistui", box);
   }
 }
 
@@ -170,6 +172,8 @@ async function signup(username, password, email) {
     }
   } catch (error) {
     console.log(error);
+    const box = document.getElementById("signup-box");
+    displayError("Käyttäjän luominen ei onnistunut", box);
   }
 }
 
@@ -222,33 +226,40 @@ function openInfoView(profile) {
 
 // Shown user ptofile to user if login was succesful:
 async function showProfile() {
-  const profile = await getUserInfo();
-  contentContainer.innerHTML = "";
+  try {
+    const profile = await getUserInfo();
+    contentContainer.innerHTML = "";
+    sessionStorage.removeItem("favouriteRest");
+    sessionStorage.setItem("favouriteRest", profile.favouriteRestaurant);
 
-  console.log(profile);
-  const contentBox = profileView(profile);
+    console.log(profile);
 
-  contentContainer.appendChild(contentBox);
+    const contentBox = profileView(profile);
+    contentContainer.appendChild(contentBox);
 
-  document
-    .getElementById("change-button")
-    .addEventListener("click", openChangeModal);
-  document.getElementById("logout-button").addEventListener("click", logout);
-  document
-    .getElementById("change-avatar")
-    .addEventListener("click", changeProfilePicture);
+    document
+      .getElementById("change-button")
+      .addEventListener("click", openChangeModal);
+    document.getElementById("logout-button").addEventListener("click", logout);
+    document
+      .getElementById("change-avatar")
+      .addEventListener("click", () => changeProfilePicture(profile));
 
-  contentContainer.appendChild(contentBox);
+    contentContainer.appendChild(contentBox);
+  } catch (error) {
+    console.log("Show profile:", error);
+    createLoginSingupBox();
+  }
 }
 
 // The change info view shown in modal:
 function openChangeModal() {
-  console.log("Avataan ikkuna tietojen muuttamiselle...");
-  const modalView = changeInfoModal();
+  const modalView = changeInfoModal(sessionStorage.getItem("restaurants"));
 
   const password = document.getElementById("passwordField");
   const email = document.getElementById("emailField");
   const username = document.getElementById("usernameField");
+  const restaurant = document.getElementById("restaurant-selection");
   const checkbox = document.getElementById("showPassword-checkbox");
 
   // Show or hide password (change passwordField type between password and text):
@@ -261,7 +272,12 @@ function openChangeModal() {
   document
     .getElementById("submit-changes-button")
     .addEventListener("click", () =>
-      submitChanges(password.value, email.value, username.value)
+      submitChanges(
+        password.value,
+        email.value,
+        username.value,
+        restaurant.value
+      )
     );
 
   modalView.showModal();
@@ -275,7 +291,12 @@ function closeModal() {
 }
 
 // Submit changes to API:
-async function submitChanges(newPassword, newEmail, newUsername) {
+async function submitChanges(
+  newPassword,
+  newEmail,
+  newUsername,
+  newRestaurant
+) {
   try {
     let usernameAvailable;
     const user = await getUserInfo();
@@ -302,15 +323,16 @@ async function submitChanges(newPassword, newEmail, newUsername) {
       updates.username = newUsername;
     }
 
-    if (newEmail && newEmail !== user.email) {
-      updates.email = newEmail;
+    if (newEmail && newEmail !== user.email) updates.email = newEmail;
+
+    if (newPassword) updates.password = newPassword;
+
+    console.log(newRestaurant);
+    if (newRestaurant !== user.favouriteRestaurant) {
+      updates.favouriteRestaurant = newRestaurant;
     }
 
-    if (newPassword) {
-      updates.password = newPassword;
-    }
-
-    if (usernameAvailable) {
+    if (usernameAvailable || !newUsername) {
       const options2 = {
         method: "PUT",
         headers: {
@@ -370,7 +392,7 @@ async function getUserInfo() {
     );
     return profile;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
@@ -388,12 +410,7 @@ async function fetchData(url, options) {
 function main() {
   const token = sessionStorage.getItem("token");
   if (token) {
-    try {
-      showProfile();
-    } catch (error) {
-      console.log(error);
-      createLoginSingupBox();
-    }
+    showProfile();
   } else {
     createLoginSingupBox();
   }

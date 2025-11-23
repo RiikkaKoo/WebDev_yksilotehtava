@@ -365,7 +365,7 @@ caption {
 
   #options {
     position: sticky;
-    top: 466px;
+    top: 446px;
   }
 
   #map {
@@ -375,7 +375,7 @@ caption {
     right: auto !important;
 
     width: 98% !important;
-    height: 40vh !important;
+    height: 350px !important;
 
     margin: 0 1% !important;
   }
@@ -408,6 +408,7 @@ caption {
   #dialog-header h1 {
     width: 100%;
     margin: 0;
+    font-size: 26px;
   }
 
   #columns {
@@ -462,15 +463,22 @@ caption {
     font-size: 14px;
   }
 
+  #table-body {
+    font-size: 14px;
+  }
+
   .favourite-column img {
     width: 80%;
     height: auto;
   }
 
-  .menu-table td {
-    text-align: left;
+  .menu-table th {
     padding: 7px;
-    border: 1px solid #2d6965;
+    font-size: 14px;
+  }
+
+  .menu-table td {
+    padding: 7px;
     font-size: 13px;
   }
 }

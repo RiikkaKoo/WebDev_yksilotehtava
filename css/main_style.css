@@ -98,7 +98,7 @@ main {
 }
 
 #map {
-  position: fixed;
+  position: fixed !important;
   height: 88vh;
   top: 96px;
   right: 0;
@@ -350,4 +350,127 @@ caption {
   text-transform: capitalize;
   font-size: 20px;
   margin: 20px 0 5px 0;
+}
+
+@media screen and (max-width: 1078px) {
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #list-container {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  #options {
+    position: sticky;
+    top: 466px;
+  }
+
+  #map {
+    order: -1;
+    position: sticky !important;
+    top: 96px !important;
+    right: auto !important;
+
+    width: 98% !important;
+    height: 40vh !important;
+
+    margin: 0 1% !important;
+  }
+
+  .favourite-column img {
+    width: 70%;
+    height: auto;
+  }
+
+  tr {
+    scroll-margin-top: 650px;
+  }
+
+  dialog {
+    width: 90%;
+    margin: auto;
+    padding: 2%;
+  }
+
+  #dialog-header {
+    margin: 20px 1%;
+  }
+
+  #dialog-header span {
+    width: 3%;
+    margin: 0;
+    text-align: center;
+  }
+
+  #dialog-header h1 {
+    width: 100%;
+    margin: 0;
+  }
+
+  #columns {
+    display: block;
+  }
+
+  #menu-column {
+    width: 100%;
+    margin: 0;
+  }
+
+  #menu-column h2 {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  #rest-info {
+    width: 100%;
+    margin: 0 1%;
+    text-align: center;
+  }
+
+  .menu-table th {
+    font-size: 16px;
+  }
+
+  .menu-table td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #2d6965;
+  }
+}
+
+@media screen and (max-width: 556px) {
+  main {
+    width: 98%;
+  }
+
+  #menu-options button {
+    padding: 10px 2%;
+    font-size: 12px;
+  }
+
+  #item-search select {
+    padding: 4%;
+    font-size: 14px;
+  }
+
+  #item-search input {
+    width: 90%;
+    padding: 4%;
+    font-size: 14px;
+  }
+
+  .favourite-column img {
+    width: 80%;
+    height: auto;
+  }
+
+  .menu-table td {
+    text-align: left;
+    padding: 7px;
+    border: 1px solid #2d6965;
+    font-size: 13px;
+  }
 }

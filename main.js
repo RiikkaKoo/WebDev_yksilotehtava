@@ -1,4 +1,3 @@
-import { restaurants as restList } from "./restaurants.js";
 import { restaurantRow, restaurantModal } from "./components.js";
 
 // Variables for the program:
@@ -247,7 +246,6 @@ async function main() {
     };
     restaurants = await fetchData(url, options);
     sessionStorage.setItem("restaurants", JSON.stringify(restaurants));
-    // restaurants = restList;
     //console.log(restaurants);
 
     displayRestaurants(restaurants);

@@ -103,7 +103,7 @@ export const restaurantModal = (restaurant, menu, menuType) => {
   return dialog;
 };
 
-function createDailyMenu(menu) {
+function createDailyMenu1(menu) {
   const menuContent = document.createElement("div");
   menuContent.id = "daily-menu";
   console.log(menu);
@@ -128,9 +128,68 @@ function createDailyMenu(menu) {
   return menuContent;
 }
 
+function createDailyMenu(menu) {
+  const menuContent = document.createElement("div");
+  menuContent.id = "daily-menu";
+
+  const dayTable = document.createElement("table");
+  dayTable.classList.add("menu-table");
+
+  const dayTableHead = document.createElement("thead");
+  const courseTh = document.createElement("th");
+  courseTh.innerText = "Kuvaus";
+  const allergTh = document.createElement("th");
+  allergTh.innerText = "Ruokavalio";
+  const priceTh = document.createElement("th");
+  priceTh.innerText = "Hinnat";
+
+  dayTableHead.appendChild(courseTh);
+  dayTableHead.appendChild(allergTh);
+  dayTableHead.appendChild(priceTh);
+
+  dayTable.appendChild(dayTableHead);
+
+  const dayTableBody = document.createElement("tbody");
+
+  if (menu === undefined || menu === null) {
+    const courseRow = document.createElement("tr");
+    const descTd = document.createElement("td");
+    descTd.innerHTML = `Ruokalistaa ei ole saatavilla.`;
+    courseRow.appendChild(descTd);
+    dayTableBody.appendChild(courseRow);
+  } else if (menu.courses.length > 0) {
+    const courses = menu.courses;
+    for (let i = 0; i < courses.length; i++) {
+      const courseRow = document.createElement("tr");
+
+      const descTd = document.createElement("td");
+      const allergTd = document.createElement("td");
+      const priceTd = document.createElement("td");
+
+      descTd.innerHTML = `${courses[i].name}`;
+      allergTd.innerHTML = `${courses[i].diets ?? ""}`;
+      priceTd.innerHTML = `${courses[i].price ?? "Hintoja ei ole annettu"}`;
+
+      courseRow.appendChild(descTd);
+      courseRow.appendChild(allergTd);
+      courseRow.appendChild(priceTd);
+      dayTableBody.appendChild(courseRow);
+    }
+  } else {
+    const courseRow = document.createElement("tr");
+    const descTd = document.createElement("td");
+    descTd.innerHTML = `Tälle päivälle ei ole ruokalistaa.`;
+    courseRow.appendChild(descTd);
+    dayTableBody.appendChild(courseRow);
+  }
+  dayTable.appendChild(dayTableBody);
+  menuContent.appendChild(dayTable);
+  return menuContent;
+}
+
 function createWeeklyMenu(menu) {
   const menuContent = document.createElement("div");
-  console.log(menu);
+  //console.log(menu);
   menuContent.id = "weekly-menu";
   if (menu === undefined || menu === null) {
     const course = document.createElement("p");
@@ -138,20 +197,49 @@ function createWeeklyMenu(menu) {
     menuContent.appendChild(course);
   } else if (menu.days.length > 0) {
     const days = menu.days;
-    console.log(days);
+    //console.log(days);
     days.forEach((day) => {
-      const date = document.createElement("h2");
+      const dayTable = document.createElement("table");
+      dayTable.classList.add("menu-table");
+
+      const date = document.createElement("caption");
       date.innerText = day.date;
-      const coursesDiv = document.createElement("div");
+
+      const dayTableHead = document.createElement("thead");
+      const courseTh = document.createElement("th");
+      courseTh.innerText = "Kuvaus";
+      const allergTh = document.createElement("th");
+      allergTh.innerText = "Ruokavalio";
+      const priceTh = document.createElement("th");
+      priceTh.innerText = "Hinnat";
+
+      dayTableHead.appendChild(courseTh);
+      dayTableHead.appendChild(allergTh);
+      dayTableHead.appendChild(priceTh);
+
+      dayTable.appendChild(date);
+      dayTable.appendChild(dayTableHead);
+
+      const dayTableBody = document.createElement("tbody");
+
       day.courses.forEach((c) => {
-        const course = document.createElement("p");
-        course.innerHTML = `${c.name} -- ${
-          c.price ?? "Hintoja ei ole annettu"
-        }<br>${c.diets ?? ""}`;
-        coursesDiv.appendChild(course);
+        const courseRow = document.createElement("tr");
+
+        const descTd = document.createElement("td");
+        const allergTd = document.createElement("td");
+        const priceTd = document.createElement("td");
+
+        descTd.innerHTML = `${c.name}`;
+        allergTd.innerHTML = `${c.diets ?? ""}`;
+        priceTd.innerHTML = `${c.price ?? "Hintoja ei ole annettu"}`;
+
+        courseRow.appendChild(descTd);
+        courseRow.appendChild(allergTd);
+        courseRow.appendChild(priceTd);
+        dayTableBody.appendChild(courseRow);
       });
-      menuContent.appendChild(date);
-      menuContent.appendChild(coursesDiv);
+      dayTable.appendChild(dayTableBody);
+      menuContent.appendChild(dayTable);
     });
   } else {
     const course = document.createElement("p");

@@ -226,6 +226,14 @@ tr:hover {
   background-color: #cac4b8;
 }
 
+.highlighted {
+  background-color: #888071;
+  font-weight: bold;
+}
+
+/* --------------------------------------------------------------------------------------------------------------
+DIALOG VIEW:                                                                                                      */
+
 dialog {
   text-align: right;
   background-color: #f1f1ef;
@@ -264,11 +272,18 @@ span:hover {
   background-color: #cac4b8;
 }
 
-dialog h2 {
+#menu-column h2 {
   text-align: left;
-  font-size: 18px;
   width: 100%;
-  margin: 15px 0 10px 30px;
+  margin: 15px 0 10px 0;
+  font-size: 22px;
+}
+
+#rest-info h2 {
+  text-align: left;
+  width: 100%;
+  margin-top: 15px;
+  font-size: 22px;
 }
 
 #daily-menu p {
@@ -279,11 +294,14 @@ dialog h2 {
   margin-top: 30px;
 }
 
+#rest-info {
+  width: 30%;
+  margin: 0 20px 25px 30px;
+}
+
 #rest-info p {
   text-align: left;
   width: 100%;
-  margin: 10px 0;
-  margin-left: 30px;
 }
 
 #columns {
@@ -304,14 +322,32 @@ dialog h2 {
 #menu-column {
   width: 70%;
   margin-bottom: 25px;
+  margin-right: 15px;
 }
 
-#rest-info {
-  width: 30%;
-  margin-bottom: 25px;
+.menu-table {
+  border: 2px solid #2d6965;
 }
 
-.highlighted {
-  background-color: #888071;
-  font-weight: bold;
+.menu-table th {
+  background-image: linear-gradient(to bottom, #152927, #2d6965);
+  border: 2px solid #152927;
+}
+
+.menu-table td {
+  text-align: left;
+  padding: 15px;
+  border: 1px solid #2d6965;
+}
+
+.menu-table tr:hover {
+  background-color: #b3dfdb;
+}
+
+caption {
+  width: 50%;
+  text-align: left;
+  text-transform: capitalize;
+  font-size: 20px;
+  margin: 20px 0 5px 0;
 }

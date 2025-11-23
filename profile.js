@@ -3,6 +3,7 @@ import {
   signupViewContent,
   profileView,
   changeInfoModal,
+  uploadAvatarView,
 } from "./components.js";
 
 const contentContainer = document.getElementById("page-content");
@@ -228,13 +229,18 @@ function openInfoView(profile) {
 async function showProfile() {
   try {
     const profile = await getUserInfo();
+    const storageRestaurants = JSON.parse(
+      sessionStorage.getItem("restaurants")
+    );
+    const reataurants = storageRestaurants ?? (await getRestaurants());
+
     contentContainer.innerHTML = "";
     sessionStorage.removeItem("favouriteRest");
     sessionStorage.setItem("favouriteRest", profile.favouriteRestaurant);
 
     console.log(profile);
 
-    const contentBox = profileView(profile);
+    const contentBox = profileView(profile, reataurants);
     contentContainer.appendChild(contentBox);
 
     document
@@ -243,7 +249,7 @@ async function showProfile() {
     document.getElementById("logout-button").addEventListener("click", logout);
     document
       .getElementById("change-avatar")
-      .addEventListener("click", () => changeProfilePicture(profile));
+      .addEventListener("click", () => changeProfilePictureModal(profile));
 
     contentContainer.appendChild(contentBox);
   } catch (error) {
@@ -372,8 +378,97 @@ function logout() {
 }
 
 // Change the profile picture by uploading a new picture:
-function changeProfilePicture() {
+function changeProfilePictureModal(profile) {
+  const uploadView = uploadAvatarView();
   console.log("Avataan ikkuna profiilikuvan muuttamiselle...");
+
+  document.querySelector("dialog span").addEventListener("click", closeModal);
+
+  document
+    .getElementById("file-input")
+    .addEventListener("input", updatePreview);
+
+  const uploadBtn = document.getElementById("upload-button");
+  uploadBtn.addEventListener("click", uploadAvatar);
+  uploadView.showModal();
+}
+
+// Show the image as a preview:
+function updatePreview() {
+  const inputFiles = document.getElementById("file-input");
+  const imageFile = inputFiles.files[0];
+  const imageURL = URL.createObjectURL(imageFile);
+
+  const preview = document.getElementById("avatar-preview");
+  preview.src = imageURL;
+  preview.alt = imageFile.name;
+}
+
+// Upload the avatar and update the user info with new file name:
+async function uploadAvatar(event) {
+  event.preventDefault();
+
+  try {
+    const token = sessionStorage.getItem("token");
+    const inputFiles = document.getElementById("file-input");
+    const imageFile = inputFiles.files[0];
+
+    const formData = new FormData();
+    formData.append("avatar", imageFile);
+    const options = {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body: formData,
+    };
+
+    const response = await fetchData(
+      "https://media2.edu.metropolia.fi/restaurant/api/v1/users/avatar",
+      options
+    );
+    console.log(response);
+
+    changeAvatar(response.avatar);
+
+    showProfile();
+
+    displayMessage(
+      "Profiilikuvan vaihdettu!",
+      document.querySelector("dialog")
+    );
+  } catch (error) {
+    console.log(error);
+    displayError(
+      "Profiilikuvan vaihtaminen epäonnistui",
+      document.querySelector("dialog")
+    );
+  }
+}
+
+// Change the avatar by updating user info:
+async function changeAvatar(fileName) {
+  try {
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + sessionStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        avatar: fileName,
+      }),
+    };
+
+    const response = await fetchData(
+      `https://media2.edu.metropolia.fi/restaurant/api/v1/users`,
+      options
+    );
+    console.log("Vastaus: ", response);
+  } catch (error) {
+    throw error;
+  }
 }
 
 // Get current users info for the profile view:
@@ -393,6 +488,23 @@ async function getUserInfo() {
     return profile;
   } catch (error) {
     throw error;
+  }
+}
+
+// Get restaurants. Used for getting restaurant name for profile if session storage is empty (user has not visited front page after loggin out):
+async function getRestaurants() {
+  try {
+    const url =
+      "https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants";
+    const options = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const restaurants = await fetchData(url, options);
+    return restaurants;
+  } catch (error) {
+    console.log(error);
   }
 }
 

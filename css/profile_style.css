@@ -372,6 +372,10 @@ PROFILE VIEW:                        */
   width: 100%;
 }
 
+#image-container img {
+  width: 200px;
+}
+
 #info-box {
   text-align: left;
   width: 40%;
@@ -391,7 +395,7 @@ PROFILE VIEW:                        */
 }
 
 /* ---------------------------------------------------------------
-DIALOG VIEW:                        */
+DIALOG VIEW FOR CHANGE INFO:                        */
 
 dialog {
   text-align: right;
@@ -481,4 +485,51 @@ dialog #checkbox-container {
   color: rgb(23, 143, 93);
   font-weight: bold;
   font-size: 18px;
+}
+
+/* ---------------------------------------------------------------
+DIALOG VIEW FOR CHANGE AVATAR:                                     */
+
+#upload-view-container {
+  display: flex;
+  margin: 50px auto;
+}
+
+dialog h2 {
+  text-align: center;
+}
+
+#form-container {
+  width: 60%;
+}
+
+#preview-container {
+  width: 40%;
+}
+
+#upload-form {
+  width: 70%;
+  padding: 0 20px;
+  text-align: left;
+}
+
+#avatar-preview {
+  width: 200px;
+  margin: auto;
+}
+
+#upload-form label {
+  padding: 5px;
+  width: 100%;
+  margin: 10px auto 5px auto;
+}
+
+#upload-form input {
+  width: 100%;
+  margin: auto;
+}
+
+#upload-form button {
+  width: 40%;
+  margin: 20px 0;
 }

@@ -223,7 +223,6 @@ function selectMenu(event) {
 function filterRestaurants() {
   const query = searchWith.value.toLowerCase();
   const type = searchBy.value;
-  for (let rest of restaurants) console.log(rest[type]);
   const filtered = restaurants.filter((item) =>
     item[type].toLowerCase().includes(query)
   );

@@ -286,9 +286,7 @@ export const signupViewContent = () => {
 };
 
 // The profile view if user is logged in:
-export const profileView = (profile) => {
-  const restaurants = JSON.parse(sessionStorage.getItem("restaurants"));
-
+export const profileView = (profile, reataurants) => {
   const contentBox = document.createElement("div");
   const avatarBox = document.createElement("div");
   const imageContainer = document.createElement("div");
@@ -303,7 +301,9 @@ export const profileView = (profile) => {
   title.innerText = "PROFIILI";
 
   const avatarImg = document.createElement("img");
-  avatarImg.src = "uploads/cat_profile_pic.jpg";
+  avatarImg.src = profile.avatar
+    ? `https://media2.edu.metropolia.fi/restaurant/uploads/${profile.avatar}`
+    : "img/user_avatar_img.jpg";
   avatarImg.alt = "Käyttäjän profiilikuva";
 
   const avatarChange = document.createElement("button");
@@ -316,7 +316,8 @@ export const profileView = (profile) => {
   const email = document.createElement("p");
   email.innerText = `SÄHKÖPOSTIOSOITE: ${profile.email}`;
 
-  const favourite = restaurants.find(
+  console.log(reataurants);
+  const favourite = reataurants.find(
     (r) => r._id === profile.favouriteRestaurant
   );
   const favRestaurant = document.createElement("p");
@@ -437,6 +438,61 @@ export const changeInfoModal = (reataurants) => {
   modal.appendChild(close);
   modal.appendChild(content);
   modal.appendChild(submitChnagesBtn);
+
+  return modal;
+};
+
+export const uploadAvatarView = () => {
+  const modal = document.querySelector("dialog");
+
+  const close = document.createElement("span");
+  close.innerText = "X";
+
+  const container = document.createElement("div");
+  const imgContainer = document.createElement("div");
+  const formContainer = document.createElement("div");
+
+  const title = document.createElement("h2");
+  const form = document.createElement("form");
+  const preview = document.createElement("img");
+  const inputLabel = document.createElement("label");
+  const fileInput = document.createElement("input");
+  const uploadBtn = document.createElement("button");
+
+  title.id = "upload-title";
+  title.innerText = "VAIHDA PROFIILIKUVA";
+
+  form.id = "upload-form";
+  container.id = "upload-view-container";
+  imgContainer.id = "preview-container";
+  formContainer.id = "form-container";
+
+  preview.id = "avatar-preview";
+  preview.src = "https://placehold.co/400x300?text=Preview+IMG";
+
+  inputLabel.htmlFor = "file-input";
+  inputLabel.innerText = "Valitse kuvatiedosto: ";
+
+  fileInput.id = "file-input";
+  fileInput.name = "file-input";
+  fileInput.type = "file";
+
+  uploadBtn.id = "upload-button";
+  uploadBtn.innerText = "Lähetä";
+
+  form.appendChild(inputLabel);
+  form.appendChild(fileInput);
+  form.appendChild(uploadBtn);
+
+  imgContainer.appendChild(preview);
+  formContainer.appendChild(form);
+
+  container.appendChild(imgContainer);
+  container.appendChild(formContainer);
+
+  modal.appendChild(close);
+  modal.appendChild(title);
+  modal.appendChild(container);
 
   return modal;
 };

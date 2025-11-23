@@ -125,7 +125,7 @@ async function getWeeklyMenu(id) {
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log(weeklyMenu);
+    //console.log(weeklyMenu);
     return weeklyMenu;
   } catch (e) {
     console.log(e);
@@ -136,7 +136,7 @@ async function getWeeklyMenu(id) {
 // Display restaurant info in a modal window:
 async function openModal(id, array) {
   let selectedRes = array.find((i) => i._id === id);
-  console.log(selectedRes);
+  //console.log(selectedRes);
 
   const menu =
     currentMenuType === "daily"
@@ -144,7 +144,6 @@ async function openModal(id, array) {
       : await getWeeklyMenu(selectedRes._id);
   const modalWindow = restaurantModal(selectedRes, menu, currentMenuType);
   const modalClose = document.querySelector("#dialog-header span");
-  console.log(modalClose);
   modalClose.addEventListener("click", closeModal);
 
   modalWindow.showModal();
@@ -153,7 +152,7 @@ async function openModal(id, array) {
 // Move map to the selected restaurant:
 function setMapToSelectedRestaurant(id) {
   const marker = markersById[id];
-  console.log(marker);
+  //console.log(marker);
   if (marker) {
     marker.openPopup();
     const { lat, lng } = marker.getLatLng();
@@ -165,7 +164,7 @@ function setMapToSelectedRestaurant(id) {
 // Highlight the selected row and open a modal window:
 function selectRow(event, array) {
   let element = event.currentTarget;
-  console.log(element);
+  //console.log(element);
   setMapToSelectedRestaurant(element.id, array);
   openModal(element.id, array);
 }
@@ -216,7 +215,7 @@ function selectMenu(event) {
   });
   const currentSelection = document.getElementById(selectedBtn);
   currentSelection.classList.add("selected-menu");
-  console.log(currentMenuType);
+  //console.log(currentMenuType);
 }
 
 // Function for filtering the reataurants:
@@ -249,7 +248,7 @@ async function main() {
     restaurants = await fetchData(url, options);
     sessionStorage.setItem("restaurants", JSON.stringify(restaurants));
     // restaurants = restList;
-    console.log(restaurants);
+    //console.log(restaurants);
 
     displayRestaurants(restaurants);
     addToMap(restaurants);

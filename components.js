@@ -192,9 +192,31 @@ function createWeeklyMenu(menu) {
   //console.log(menu);
   menuContent.id = "weekly-menu";
   if (menu === undefined || menu === null) {
-    const course = document.createElement("p");
-    course.innerHTML = `Ruokalistaa ei ole saatavilla.`;
-    menuContent.appendChild(course);
+    const dayTable = document.createElement("table");
+    dayTable.classList.add("menu-table");
+
+    const dayTableHead = document.createElement("thead");
+    const courseTh = document.createElement("th");
+    courseTh.innerText = "Kuvaus";
+    const allergTh = document.createElement("th");
+    allergTh.innerText = "Ruokavalio";
+    const priceTh = document.createElement("th");
+    priceTh.innerText = "Hinnat";
+
+    dayTableHead.appendChild(courseTh);
+    dayTableHead.appendChild(allergTh);
+    dayTableHead.appendChild(priceTh);
+
+    dayTable.appendChild(dayTableHead);
+
+    const dayTableBody = document.createElement("tbody");
+    const courseRow = document.createElement("tr");
+    const descTd = document.createElement("td");
+    descTd.innerHTML = `Ruokalistaa ei ole saatavilla.`;
+    courseRow.appendChild(descTd);
+    dayTableBody.appendChild(courseRow);
+    dayTable.appendChild(dayTableBody);
+    menuContent.appendChild(dayTable);
   } else if (menu.days.length > 0) {
     const days = menu.days;
     //console.log(days);
@@ -242,9 +264,32 @@ function createWeeklyMenu(menu) {
       menuContent.appendChild(dayTable);
     });
   } else {
-    const course = document.createElement("p");
-    course.innerHTML = `Tälle viikolle ei ole ruokalistaa.`;
-    menuContent.appendChild(course);
+    const dayTable = document.createElement("table");
+    dayTable.classList.add("menu-table");
+
+    const dayTableHead = document.createElement("thead");
+    const courseTh = document.createElement("th");
+    courseTh.innerText = "Kuvaus";
+    const allergTh = document.createElement("th");
+    allergTh.innerText = "Ruokavalio";
+    const priceTh = document.createElement("th");
+    priceTh.innerText = "Hinnat";
+
+    dayTableHead.appendChild(courseTh);
+    dayTableHead.appendChild(allergTh);
+    dayTableHead.appendChild(priceTh);
+
+    dayTable.appendChild(dayTableHead);
+
+    const dayTableBody = document.createElement("tbody");
+
+    const courseRow = document.createElement("tr");
+    const descTd = document.createElement("td");
+    descTd.innerHTML = `Tälle viikolle ei ole ruokalistaa.`;
+    courseRow.appendChild(descTd);
+    dayTableBody.appendChild(courseRow);
+    dayTable.appendChild(dayTableBody);
+    menuContent.appendChild(dayTable);
   }
   return menuContent;
 }

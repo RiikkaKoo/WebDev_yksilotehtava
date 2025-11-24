@@ -484,9 +484,8 @@ export const profileView = (profile, reataurants) => {
 };
 
 // Modal dialog view for changing user information:
-export const changeInfoModal = (reataurants) => {
-  const restaurantJson = JSON.parse(reataurants);
-  restaurantJson.sort((a, b) => a.name.localeCompare(b.name));
+export const changeInfoModal = (restaurants) => {
+  restaurants.sort((a, b) => a.name.localeCompare(b.name));
 
   const modal = document.querySelector("dialog");
 
@@ -522,7 +521,7 @@ export const changeInfoModal = (reataurants) => {
   favouriteLabel.innerText = "Valitse suosikkiravintola:";
   const restaurantSelect = document.createElement("select");
 
-  restaurantJson.forEach((r) => {
+  restaurants.forEach((r) => {
     const option = document.createElement("option");
     option.value = r._id;
     if (r._id === sessionStorage.getItem("favouriteRest"))

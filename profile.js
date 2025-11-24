@@ -232,7 +232,7 @@ async function showProfile() {
     const storageRestaurants = JSON.parse(
       sessionStorage.getItem("restaurants")
     );
-    const reataurants = storageRestaurants ?? (await getRestaurants());
+    const restaurants = storageRestaurants ?? (await getRestaurants());
 
     contentContainer.innerHTML = "";
     sessionStorage.removeItem("favouriteRest");
@@ -240,7 +240,7 @@ async function showProfile() {
 
     console.log(profile);
 
-    const contentBox = profileView(profile, reataurants);
+    const contentBox = profileView(profile, restaurants);
     contentContainer.appendChild(contentBox);
 
     document
@@ -259,34 +259,47 @@ async function showProfile() {
 }
 
 // The change info view shown in modal:
-function openChangeModal() {
-  const modalView = changeInfoModal(sessionStorage.getItem("restaurants"));
-
-  const password = document.getElementById("passwordField");
-  const email = document.getElementById("emailField");
-  const username = document.getElementById("usernameField");
-  const restaurant = document.getElementById("restaurant-selection");
-  const checkbox = document.getElementById("showPassword-checkbox");
-
-  // Show or hide password (change passwordField type between password and text):
-  checkbox.addEventListener("click", () => {
-    const type = passwordField.type === "password" ? "text" : "password";
-    passwordField.type = type;
-  });
-
-  document.querySelector("dialog span").addEventListener("click", closeModal);
-  document
-    .getElementById("submit-changes-button")
-    .addEventListener("click", () =>
-      submitChanges(
-        password.value,
-        email.value,
-        username.value,
-        restaurant.value
-      )
+async function openChangeModal() {
+  try {
+    const storageRestaurants = JSON.parse(
+      sessionStorage.getItem("restaurants")
     );
+    const restaurants = storageRestaurants ?? (await getRestaurants());
 
-  modalView.showModal();
+    const modalView = changeInfoModal(restaurants);
+
+    const password = document.getElementById("passwordField");
+    const email = document.getElementById("emailField");
+    const username = document.getElementById("usernameField");
+    const restaurant = document.getElementById("restaurant-selection");
+    const checkbox = document.getElementById("showPassword-checkbox");
+
+    // Show or hide password (change passwordField type between password and text):
+    checkbox.addEventListener("click", () => {
+      const type = passwordField.type === "password" ? "text" : "password";
+      passwordField.type = type;
+    });
+
+    document.querySelector("dialog span").addEventListener("click", closeModal);
+    document
+      .getElementById("submit-changes-button")
+      .addEventListener("click", () =>
+        submitChanges(
+          password.value,
+          email.value,
+          username.value,
+          restaurant.value
+        )
+      );
+
+    modalView.showModal();
+  } catch (error) {
+    console.log(error);
+    displayError(
+      "Käyttäjätietoja ei voida juuri nyt muuttaa",
+      document.getElementById("info-box")
+    );
+  }
 }
 
 // Close modal view:
